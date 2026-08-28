@@ -52,10 +52,24 @@ const parseReadmeOutcomeTable = (md) => {
   const splitRow = (line) => line.trim().replace(/^\||\|$/g, '').split('|').map((c) => c.trim());
   const header = splitRow(lines[tableStart]);
   const col = (name) => header.findIndex((h) => h.toLowerCase().startsWith(name.toLowerCase()));
-  const refCol = col('Reference');
-  const outcomeCol = col('CMS Required Outcomes');
-  const metricsCol = col('Default Metrics');
-  const regCol = col('Regulatory Source');
+  const cols = {
+    'Reference #': col('Reference'),
+    'CMS Required Outcomes': col('CMS Required Outcomes'),
+    'Default Metrics': col('Default Metrics'),
+    'Regulatory Sources': col('Regulatory Source'),
+  };
+  for (const [field, idx] of Object.entries(cols)) {
+    if (idx < 0) {
+      throw new Error(
+        `ETL: CMS-Required Outcomes table is missing a "${field}" column — CMS may have renamed it. ` +
+          `Found headers: ${JSON.stringify(header)}. Failing loudly instead of shipping a hole.`,
+      );
+    }
+  }
+  const refCol = cols['Reference #'];
+  const outcomeCol = cols['CMS Required Outcomes'];
+  const metricsCol = cols['Default Metrics'];
+  const regCol = cols['Regulatory Sources'];
 
   // GFM table cells can't contain a real newline, so CMS uses <br/> and markdown links
   // for the bulleted sub-items; rejoin those as plain newline-separated text so the

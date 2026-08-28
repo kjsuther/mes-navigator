@@ -18,7 +18,7 @@ Unofficial. Not affiliated with or endorsed by CMS.
 
 Three further modules (HIE, AVS, 1115/Waiver) certify against state-specific outcomes only. EVV's
 9 CMS-required outcomes are published as a table in its module readme rather than a `_data/*.csv`
-like the other 13 — the ETL reads both.
+like the other 12 CSV-backed modules — the ETL reads both.
 
 ## Data pipeline
 
